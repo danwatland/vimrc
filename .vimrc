@@ -1,10 +1,29 @@
-execute pathogen#infect()
+" vim.plug {{{
+call plug#begin('~/.vim/plugged')
+
+Plug 'scrooloose/nerdtree'
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'sheerun/vim-polyglot'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'alvan/vim-closetag'
+Plug 'xolox/vim-misc'
+Plug 'vimwiki/vimwiki'
+Plug 'w0rp/ale'
+Plug 'jiangmiao/auto-pairs'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+call plug#end()
+" }}}
 
 " General {{{
 filetype plugin indent on
 
 syntax enable
 
+let macvim_skip_colorscheme=1
 let mapleader=","
 
 " Turn on the Wild menu
@@ -31,6 +50,11 @@ set cursorline
 " }}}
 
 " Colors {{{ 
+if has('gui_running')
+    set background=dark
+else
+    set background=dark
+endif
 colorscheme gruvbox
 " }}}
 
@@ -90,6 +114,7 @@ set softtabstop=4
 
 set ai "auto indent
 set si "smart indent
+set linebreak
 set wrap 
 
 " Configure backspace so it acts as it should act
@@ -139,11 +164,9 @@ nmap <Leader>f :ProjectFiles<CR>
 command! ProjectTags execute 'Tags' s:find_git_root()
 nmap <Leader>r :ProjectTags<CR>
 
-let g:fzf_tags_command="ctags --exclude='*/node_modules/*' --exclude='*/dist/*' --file-scope=no -R `pwd`"
-" }}}
+nmap <Leader>t :BTags<CR>
 
-" ALE {{{
-let g:ale_sign_column_always=1
+let g:fzf_tags_command="ctags --exclude='*/node_modules/*' --exclude='*/dist/*' --file-scope=no -R `pwd`"
 " }}}
 
 " NERDTree {{{
@@ -154,12 +177,32 @@ map <C-n> :NERDTreeToggle<CR>
 map <C-_> :call NERDComment(0, "toggle")<CR>
 " }}}
 
-" Gutentags {{{
-let g:gutentags_ctags_extra_args=['--options=/Users/danwatland/.ctags.d']
+" Ale {{{
+let g:sign_column_always = 1
 " }}}
 
 " vim-airline {{{
-let g:airline_theme = 'gruvbox'
+let g:airline_theme = 'base16'
+" }}}
+
+" coc.nvim {{{
+let g:coc_config_home='~/.vim/coc'
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 " }}}
 
 " }}}
